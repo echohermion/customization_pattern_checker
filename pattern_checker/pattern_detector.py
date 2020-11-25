@@ -2,6 +2,7 @@
 
 import sys
 import pprint
+import json
 from pattern_checker.function import Function
 
 from solidity_parser import parser
@@ -114,10 +115,47 @@ def compare(file_a, file_b):
                 require_conditions_b = func_b.require_list
                 if_conditions_b = func_b.if_list
 
+                # print(func_a.func_name)
+                # print("Require:")
+                # print(require_conditions_a)
+                # print(require_conditions_b)
+                # print("If:")
+                # print(if_conditions_a)
+                # print(if_conditions_b)
+                # print("=========================")
+
                 # Then, detect require_releated patterns and if-related patterns from the require/if conditions of
                 # these two files.
+                if require_conditions_a == [[]] and require_conditions_b == [[]] and if_conditions_a == [[]] and if_conditions_b == [[]]:
+                    print("No require statements, No if statements!")
+                elif require_conditions_a != [[]] and require_conditions_b != [[]]:
+                    detect_require_related_patterns(require_conditions_a, require_conditions_b)
 
 
+def detect_require_related_patterns(require_conditions_a, require_conditions_b):
+    """
+    Detect patterns only need to compare require statement conditions of two contracts
+    Args:
+        require_condition_a
+        require_condition_b
+    Returns:
+        A list of detected require-related patterns
+    """
+    if require_conditions_a != require_conditions_b:
+        # compare the diff between two lists， output same key and different value
+        for cond_a in require_conditions_a[0][0]:
+            for cond_b in require_conditions_b[0][0]:
+                print(cond_a)
+                print(cond_b)
+                diff = cond_a.keys() & cond_b
+                diff_vals = [(k, cond_a[k], cond_b[k]) for k in diff if cond_a[k] != cond_b[k]]
+                # JSon formatted output
+                diff_vals = json.dumps(diff_vals, indent=4, separators=(',', ':'))
+                print(diff_vals)
+
+
+
+        pass
 
 
 if __name__ == '__main__':

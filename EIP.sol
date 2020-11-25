@@ -12,10 +12,9 @@ contract EIP20 is EIP20Interface {
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
-        require(balances[msg.sender] > _value);
-        require(msg.sender!=address(0));
-        require(_to!=msg.sender);
-        if(to==address(0)){
+        require(balances[msg.sender] >= _value);
+        require(_to!=msg.sender&&_value>0);
+        if(to==123434){
             return false;
         }
         balances[msg.sender] -= _value;
@@ -24,8 +23,10 @@ contract EIP20 is EIP20Interface {
     }
 
     function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
-        require(_owner!=_spender);
-        require(_owner!=address(0));
+        if(_owner!=_spender){
+            throw;
+        }
+        require(_owner!=address(0)&&_spender!=address(0));
         return allowed[_owner][_spender];
     }
 }
