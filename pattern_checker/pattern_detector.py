@@ -153,9 +153,22 @@ def detect_require_related_patterns(require_conditions_a, require_conditions_b):
                 diff_vals = json.dumps(diff_vals, indent=4, separators=(',', ':'))
                 print(diff_vals)
 
-
-
         pass
+
+
+def find_all_key(target_key, dictData, notFound=[]):
+    queue = [dictData]
+    result = []
+    while len(queue) > 0:
+        data = queue.pop()
+        for key, value in data.items():
+            if key == target_key:
+                result.append(value)
+            elif type(value) == dict:
+                queue.append(value)
+    if not result:
+        result = notFound
+    return result
 
 
 if __name__ == '__main__':
