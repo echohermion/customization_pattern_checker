@@ -6,7 +6,7 @@ import pprint
 from . import parser
 
 if __name__ == "__main__":
-    if not len(sys.argv)>2 or sys.argv[1] not in ("parse","outline"):
+    if not len(sys.argv) > 2 or sys.argv[1] not in ("parse", "outline"):
         print("\n- missing subcommand or path to solidity file.\n")
         print("#> python -m solidity_parser <subcommand> <solidity file>")
         print("")
@@ -15,27 +15,27 @@ if __name__ == "__main__":
         print("\t\t outline ... print a high level outline of the sourceUnit")
         sys.exit(1)
 
-    node = parser.parse_file(sys.argv[2])
-    if sys.argv[1]=="parse":
+    node = parser.parse_filquire(sys.argv[2])
+    if sys.argv[1] == "parse":
         pprint.pprint(node)
-    elif sys.argv[1]=="outline":
+    elif sys.argv[1] == "outline":
         level = 0
         sourceUnitObject = parser.objectify(node)
         print("=== pragmas ===")
-        level +=1
+        level += 1
         for p in sourceUnitObject.pragmas:
             print(("\t" * level) + "* " + str(p))
-        level -=1
+        level -= 1
         print("=== imports ===")
-        level +=1
+        level += 1
         for p in sourceUnitObject.imports:
             print(("\t" * level) + "* " + str(p))
         level = 0
         for contract_name, contract_object in sourceUnitObject.contracts.items():
             print("=== contract: " + contract_name)
-            level +=1
+            level += 1
 
-            print(("\t" * level) + "=== Inherited Contrracts: " + ','.join([bc.baseName.namePath for bc in  contract_object._node.baseContracts]))
+            print(("\t" * level) + "=== Inherited Contrracts: " + ','.join([bc.baseName.namePath for bc in contract_object._node.baseContracts]))
             ## statevars
             print(("\t" * level) + "=== Enums")
             level += 2
@@ -50,10 +50,10 @@ if __name__ == "__main__":
             level -= 2
             ## statevars
             print(("\t" * level) + "=== statevars" )
-            level +=2
+            level += 2
             for name in contract_object.stateVars.keys():
-                print(("\t" * level) + "* " + str(name) )
-            level -=2
+                print(("\t" * level) + "* " + str(name))
+            level -= 2
             ## modifiers
             print(("\t" * level) + "=== modifiers")
             level += 2

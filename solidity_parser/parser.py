@@ -17,7 +17,7 @@ class Node(dict):
     provide a dict interface and object attrib access
     """
     ENABLE_LOC = False
-    NONCHILD_KEYS = ("type","name","loc")
+    NONCHILD_KEYS = ("type", "name", "loc")
 
     def __init__(self, ctx, **kwargs):
         for k, v in kwargs.items():
@@ -1045,7 +1045,7 @@ def visit(node, callback_object):
     if hasattr(callback_object, "visit"+node.type):
         getattr(callback_object, "visit"+node.type)(node)
 
-    for k,v in node.items():
+    for k, v in node.items():
         if k in node.NONCHILD_KEYS:
             # skip non child items
             continue
@@ -1185,7 +1185,7 @@ def objectify(start_node):
 
             current_function = FunctionObject(_node)
             self.names[_node.name] = current_function
-            if _definition_type=="ModifierDefinition":
+            if _definition_type == "ModifierDefinition":
                 self.modifiers[_node.name] = current_function
             else:
                 self.functions[_node.name] = current_function

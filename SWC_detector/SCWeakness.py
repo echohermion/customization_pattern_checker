@@ -4,7 +4,7 @@ class SCWeakness:
     def __init__(self, ast_tree):
         self.ast_tree = ast_tree
         self.is_guarded = self.check_guarded()
-
+        pass
 
     def is_weakness(self):
         return self.is_guarded
