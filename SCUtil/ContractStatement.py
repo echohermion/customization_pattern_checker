@@ -1,4 +1,4 @@
-class ContractRequireStatement:
+class ContractStatement:
     def __init__(self, contract_name):
         self.contract_name = contract_name
         self.function_rs_list = []

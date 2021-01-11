@@ -14,6 +14,9 @@ contract EIP20 is EIP20Interface {
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balances[msg.sender] >= _value);
         require(_to!=msg.sender&&_value>0);
+
+        assert(_to!=msg.sender);
+
         if(to==0x123434){
             return false;
         }
