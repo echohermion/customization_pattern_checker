@@ -201,7 +201,7 @@ class SolidityVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SolidityParser#statement.
     def visitStatement(self, ctx:SolidityParser.StatementContext):
-        return self.visitChildren(ctx)
+        return self.visitObjectifyContractVisitorChildren(ctx)
 
 
     # Visit a parse tree produced by SolidityParser#expressionStatement.

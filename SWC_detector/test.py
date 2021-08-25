@@ -1,6 +1,6 @@
-import sys
+
 import pprint
-from SCUtil import FunctionStatement, IfStatement, RequireStatement, AssertStatement, ContractStatement
+from SCUtil import FunctionStatement, IfStatement, RequireStatement, AssertStatement
 from z3 import *
 
 from solidity_parser import parser

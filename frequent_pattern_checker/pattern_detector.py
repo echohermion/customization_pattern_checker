@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import pprint
 import json
-from pattern_checker.function import Function
+from frequent_pattern_checker.Function import Function
 
 from solidity_parser import parser
 

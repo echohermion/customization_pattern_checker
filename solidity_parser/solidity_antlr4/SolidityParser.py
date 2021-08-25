@@ -2214,7 +2214,7 @@ class SolidityParser ( Parser ):
         def parameterList(self):
             return self.getTypedRuleContext(SolidityParser.ParameterListContext,0)
 
-
+    
         def modifierList(self):
             return self.getTypedRuleContext(SolidityParser.ModifierListContext,0)
 
