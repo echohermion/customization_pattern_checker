@@ -5,12 +5,12 @@ for transaction-reverting statements in smart contracts.
 The checker is based on **python3**. 
 
 ## HowTo
-Given the filepath for one custom contract and one template contract: 
+Given the filepaths for one custom contract and one template contract(The input order is fixed): 
 ```
 #> pip install -r requirement.txt
 #> python init.py custom_contract_path template_contract_path
 ```
-Then the checker output the result of the occurrences of each customization pattern in the following format:
+Then the checker will output the result of the occurrences of each customization pattern in the following format:
 ```
 {"add_clause": 0,
  "add_var": 0,
