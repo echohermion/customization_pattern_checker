@@ -29,5 +29,5 @@ the transaction-reverting statement dataset to verify the categorization result.
 
 The below figure shows the final categorization result of customization patterns of transaction-reverting statements
  which can also be found in our paper:
-![avatar](/checker_result.png)
+![""](https://github.com/echohermion/customization_pattern_checker/blob/main/checker_result.png?raw=true)
 
