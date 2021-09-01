@@ -1,5 +1,5 @@
-from frequent_pattern_checker.variable import Variable
-from frequent_pattern_checker.comment import Comment
+from pattern_checker.variable import Variable
+from pattern_checker.comment import Comment
 
 # stat1 is the custom contract, stat2 is the template contract
 def find_cus_patterns(stat1, stat2, comm1, comm2, cus_patterns):

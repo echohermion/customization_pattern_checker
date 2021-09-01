@@ -22,9 +22,9 @@ contract DigitalReserveCurrency is EIP20Interface {
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
-        require(balances[msg.sender] >= _value);
-        require(_value > 0, "reffr");
-        require(_value > 0 && _to!=address(0) && _value < 100);
+        assert(balances[msg.sender] >= _value);
+        require(_value > 0, "the value must be greater than 0");
+        require(_to!=address(0) && _value < 100);
         balances[msg.sender] -= _value;
         balances[_to] += _value;
         emit Transfer(msg.sender, _to, _value); //solhint-disable-line indent, no-unused-vars
@@ -36,9 +36,7 @@ contract DigitalReserveCurrency is EIP20Interface {
         require(balances[_from] >= _value && allowance >= _value);
         balances[_to] += _value;
         balances[_from] -= _value;
-        if (allowance < MAX_UINT256) {
-            allowed[_from][msg.sender] -= _value;
-        }
+        require (allowance < MAX_UINT256);
         emit Transfer(_from, _to, _value); //solhint-disable-line indent, no-unused-vars
         return true;
     }
