@@ -7,62 +7,75 @@ import pattern_checker.utils as Utils
 
 # Get function name, parameters and require() and revert() statements for each function in a contract file
 def solidity_parser(file_path):
-    sourceUnit = parser.parse_file(file_path)
+    # while True:
+    #     try:
+            sourceUnit = parser.parse_file(file_path)
+            function_list = []
+            # Get subNodes(subNodes are functions and global variables)
+            subNodes = sourceUnit['children'][0]['subNodes']
+            for subNode in subNodes:
+                # If it is a function
+                if 'body' in subNode.keys():
+                    function_name = subNode['name']
+                    parameters = subNode['parameters']
 
-    # Get subNodes(subNodes are functions and global variables)
-    subNodes = sourceUnit['children'][0]['subNodes']
-    function_list = []
+                    require_list = []
+                    revert_list = []
+                    assert_list = []  # Solidity parser does not support the 'throw' keyword.
+                    general_if_list = []
+                    transaction_reverting_list = []
 
-    for subNode in subNodes:
-        # If it is a function
-        if 'body' in subNode.keys():
-            function_name = subNode['name']
-            parameters = subNode['parameters']
+                    # Get all statements in the function
+                    if subNode['body']:
+                        statements = subNode['body']['statements']
+                        for statement in statements:
+                            # pprint.pprint(statement)
+                            if statement['type'] == 'ExpressionStatement':
+                                if 'expression' in statement['expression'].keys():
+                                    # Identify require statements
+                                    if 'name' in statement['expression']['expression'].keys():
+                                        if statement['expression']['expression']['name'] == 'require':
+                                            arguments = statement['expression']['arguments']
+                                            require_list.append(arguments)
+                                            transaction_reverting_list.append(arguments)
+                                    # Identify assert statements
+                                    elif 'name' in statement['expression']['expression'].keys():
+                                        if statement['expression']['expression']['name'] == 'assert':
+                                            arguments = statement['expression']['arguments']
+                                            assert_list.append(arguments)
+                            elif statement['type'] == 'IfStatement':
+                                if statement['TrueBody'] is not None and 'statements' in statement['TrueBody'].keys():
+                                    if statement['TrueBody']['statements'][0]:
+                                        if_block = statement['TrueBody']['statements'][0]
+                                        if if_block == ';':
+                                            continue
+                                        if 'expression' in if_block.keys() and 'expression' in if_block['expression'].keys():
+                                            # Identify revert statements
+                                            if 'name' in if_block['expression']['expression'].keys():
+                                                if if_block['expression']['expression']['name'] == 'revert':
+                                                    conditions = statement['condition']
+                                                    revert_list.append(conditions)
+                                                    transaction_reverting_list.append(conditions)
+                                else:  # Identify general_purpose if statements
+                                    conditions = statement['condition']
+                                    general_if_list.append(conditions)
 
-            require_list = []
-            revert_list = []
-            assert_list = []  # Solidity parser does not support the 'throw' keyword.
-            general_if_list = []
-            transaction_reverting_list = []
+                        f = Function(function_name, parameters, require_list, revert_list, assert_list, general_if_list, transaction_reverting_list)
+                        function_list.append(f)
 
-            # Get all statements in the function
-            statements = subNode['body']['statements']
-            for statement in statements:
-                # pprint.pprint(statement)
-                if statement['type'] == 'ExpressionStatement':
-                    if 'expression' in statement['expression'].keys():
-                        # Identify require statements
-                        if statement['expression']['expression']['name'] == 'require':
-                            arguments = statement['expression']['arguments']
-                            require_list.append(arguments)
-                            transaction_reverting_list.append(arguments)
-                        # Identify assert statements
-                        elif statement['expression']['expression']['name'] == 'assert':
-                            arguments = statement['expression']['arguments']
-                            assert_list.append(arguments)
-                elif statement['type'] == 'IfStatement':
-                    if statement['TrueBody']['statements'][0]:
-                        if_block = statement['TrueBody']['statements'][0]
-                        if if_block == ';':
-                            continue
-                        if 'expression' in if_block['expression'].keys():
-                            # Identify revert statements
-                            if if_block['expression']['expression']['name'] == 'revert':
-                                conditions = statement['condition']
-                                revert_list.append(conditions)
-                                transaction_reverting_list.append(conditions)
-                        else:  # Identify general_purpose if statements
-                            conditions = statement['condition']
-                            general_if_list.append(conditions)
-
-            f = Function(function_name, parameters, require_list, revert_list, assert_list, general_if_list, transaction_reverting_list)
-            function_list.append(f)
-
-    return function_list
+            return function_list
+        # except Exception as e:
+        #     print(e)
+        #     break
+        # finally:
+        #     break
 
 
 # Identify customization patterns for two contracts
 def identify_cus_patterns(func_list_1, func_list_2, cus_patterns):
+    if func_list_1 is None or func_list_2 is None:
+        return
+
     # First find matched functions within two contracts
     for func_1 in func_list_1:
         for func_2 in func_list_2:
@@ -306,11 +319,11 @@ def init(custom_contract_path, template_contract_path):
 
 
 if __name__ == '__main__':
-    # custom_contract_path = "../samples/simple.sol"
-    # template_contract_path = "../samples/simple1.sol"
+    custom_contract_path = "../samples/simple.sol"
+    template_contract_path = "../samples/simple1.sol"
 
-    custom_contract_path = sys.argv[1]
-    template_contract_path = sys.argv[2]
+    # custom_contract_path = sys.argv[1]
+    # template_contract_path = sys.argv[2]
 
     init(custom_contract_path, template_contract_path)
 
