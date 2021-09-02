@@ -319,11 +319,11 @@ def init(custom_contract_path, template_contract_path):
 
 
 if __name__ == '__main__':
-    custom_contract_path = "../samples/simple.sol"
-    template_contract_path = "../samples/simple1.sol"
+    # custom_contract_path = "../samples/simple.sol"
+    # template_contract_path = "../samples/simple1.sol"
 
-    # custom_contract_path = sys.argv[1]
-    # template_contract_path = sys.argv[2]
+    custom_contract_path = sys.argv[1]
+    template_contract_path = sys.argv[2]
 
     init(custom_contract_path, template_contract_path)
 
